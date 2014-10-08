@@ -7,10 +7,11 @@ export GOPATH=/Users/antonholmquist/Projects/gotest
 1. go get github.com/go-martini/martini
 2. Remove .git and .ignore and commit it all
 
+# Format code (fixes indentation and stuff)
+go fmt
 
 # Run
-
- go run app.go 
+go run app.go 
 
 # go-go-get-go-install-local-packages-and-version-control
 http://stackoverflow.com/questions/10130341/go-go-get-go-install-local-packages-and-version-control
