@@ -10,13 +10,11 @@ import (
 )
 
 import "github.com/go-martini/martini"
-import "github.com/franela/goreq" 
-
-
+import "github.com/franela/goreq"
 
 func fetch(completion chan string) {
-	htmlReq := goreq.Request {
-		Uri: "https://partner.ikanobank.se/web/FAMILYuppdatera",
+	htmlReq := goreq.Request{
+		Uri:          "https://partner.ikanobank.se/web/FAMILYuppdatera",
 		MaxRedirects: 10,
 	}
 
@@ -33,7 +31,7 @@ func fetch(completion chan string) {
 
 		fmt.Println(matches)
 
-		completion <- responseString 
+		completion <- responseString
 
 	}
 }
@@ -53,9 +51,7 @@ func main() {
 
 		var responseString string = <-responseChannel
 
-
 		fmt.Println("After routine", responseString)
-
 
 		return responseString
 
@@ -63,8 +59,8 @@ func main() {
 
 	app.Get("/proxy/**", func(params martini.Params) string {
 
-		req := goreq.Request {
-			Uri: "http://www.google.com",
+		req := goreq.Request{
+			Uri:          "http://www.google.com",
 			MaxRedirects: 10,
 		}
 
@@ -77,7 +73,7 @@ func main() {
 	})
 
 	for i := 0; i < 10; i++ {
-		fmt.Println("loop: %d", i )
+		fmt.Println("loop: %d", i)
 	}
 
 	app.Run()
