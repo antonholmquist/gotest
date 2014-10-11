@@ -26,7 +26,7 @@ func fetch(completion chan string) {
 
 		responseString, _ := htmlRes.Body.ToString()
 
-		re := regexp.MustCompile("\"/web/")
+		re := regexp.MustCompile("<link href=\"/web/")
 
 		var matches [][]int = re.FindAllStringIndex(responseString, -1)
 
@@ -39,7 +39,7 @@ func fetch(completion chan string) {
             to := match[1]
 
             oldString := responseString[from:to + 38]
-            newString := "\"https://partner.ikanobank.se/web/"
+            newString := "<link href=\"https://partner.ikanobank.se/web/"
 
             modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
 
