@@ -1,1 +1,1 @@
-web: ikano-ikea-family
+web: src/github.com/antonholmquist/gotest/app.go
