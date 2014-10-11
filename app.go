@@ -3,34 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"text/scanner"
+	"io"
+	"strings"
 )
 
 import "github.com/go-martini/martini"
-import "github.com/franela/goreq"
+import "github.com/franela/goreq" 
 
 func main() {
-
-	//originalURL = "http://www.google."
-
-	fmt.Println("hello world")
-
-	req := goreq.Request {
-		Uri: "http://www.google.com",
-		MaxRedirects: 10,
-	}
-
-	res, err := req.Do()
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
-	fmt.Printf("%s\n", "\"string\"")
-
-
-	string2, _ := res.Body.ToString()
-	fmt.Printf("%s\n", string2)
-	fmt.Println("test: ", string2)
 
 	app := martini.Classic()
 
@@ -47,6 +28,21 @@ func main() {
 			fmt.Println(err.Error())
 		} else {
 			responseString, _ := htmlRes.Body.ToString()
+
+			var responseStringScanner scanner.Scanner
+
+			var responseStringReader io.Reader = strings.NewReader(responseString)
+
+			responseStringScanner.Init(responseStringReader)
+
+			tok := responseStringScanner.Scan()
+			for tok != scanner.EOF {
+				// do something with tok
+
+
+				tok = responseStringScanner.Scan()
+				fmt.Println("test: ", tok)
+			}
 
 			return responseString
 		}
