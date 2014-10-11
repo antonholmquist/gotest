@@ -34,7 +34,7 @@ func main() {
 
 	app := martini.Classic()
 
-	app.Get("/website", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
+	app.Get("/", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
 		htmlReq := goreq.Request {
 			Uri: "https://partner.ikanobank.se/web/FAMILYuppdatera",
