@@ -14,7 +14,7 @@ import "github.com/franela/goreq"
 
 
 
-func run() {
+func fetch(completion chan string) {
 	htmlReq := goreq.Request {
 		Uri: "https://partner.ikanobank.se/web/FAMILYuppdatera",
 		MaxRedirects: 10,
@@ -33,41 +33,31 @@ func run() {
 
 		fmt.Println(matches)
 
-		/*
-		var responseStringScanner scanner.Scanner
+		completion <- responseString 
 
-		var responseStringReader io.Reader = strings.NewReader(responseString)
-
-
-		responseStringScanner.Init(responseStringReader)
-
-		tok := responseStringScanner.Scan()
-		for tok != scanner.EOF {
-			// do something with tok
-
-
-			tok = responseStringScanner.Scan()
-			fmt.Println("test: ", tok)
-		}
-		*/
-
-		//return responseString
 	}
 }
 
 func main() {
 
-	go run()
+	go fetch(nil)
 
 	app := martini.Classic()
 
 	app.Get("/", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
-		
+		fmt.Println("Before routine")
+		responseChannel := make(chan string)
 
-		//https://partner.ikanobank.se/web/FAMILYuppdatera
+		go fetch(responseChannel)
 
-		return "Hello " + params["_1"]
+		var responseString string = <-responseChannel
+
+
+		fmt.Println("After routine", responseString)
+
+
+		return responseString
 
 	})
 
