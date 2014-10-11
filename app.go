@@ -5,6 +5,7 @@ import (
 )
 
 import "github.com/go-martini/martini"
+import "github.com/franela/goreq"
 
 func main() {
 	fmt.Println("hello world")
