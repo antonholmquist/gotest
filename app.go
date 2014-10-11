@@ -26,11 +26,20 @@ func fetch(completion chan string) {
 
 		responseString, _ := htmlRes.Body.ToString()
 
+        modifiedResponseString := responseString
+
 		re := regexp.MustCompile("\"/web/")
 
 		var matches [][]int = re.FindAllStringIndex(responseString, -1)
 
-        modifiedResponseString := responseString
+        
+
+        /*
+        Modify relative url so that links will still be correct
+        From: <link href="/web/(X(1)S(j0kdjk45m1cpmq45fdxok4n0))/web/site_files/templates/template.css"
+        To: <link href="https://partner.ikanobank.se/web/site_files/templates/template.css"
+
+        */
 
         for i := 0; i < len(matches); i++ {
 
@@ -42,15 +51,7 @@ func fetch(completion chan string) {
             newString := "\"https://partner.ikanobank.se/web/"
 
             modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
-
-            fmt.Println(from)
-            fmt.Println(to)
-            fmt.Println(oldString)
-            fmt.Println(newString)
-
         }
-
-		fmt.Println(matches)
 
 		completion <- modifiedResponseString
 
