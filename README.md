@@ -13,7 +13,7 @@ export PATH=$PATH:$GOPATH/bin
 go fmt
 
 # Run
-go run app.go 
+go run src/github.com/antonholmquist/gotest/app.go 
 
 # go-go-get-go-install-local-packages-and-version-control
 http://stackoverflow.com/questions/10130341/go-go-get-go-install-local-packages-and-version-control
