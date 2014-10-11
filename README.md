@@ -1,7 +1,9 @@
 
 # Export GOPATH
 Should be set to project directory to make everything simple
+
 export GOPATH=/Users/antonholmquist/Projects/gotest
+export PATH=$PATH:$GOPATH/bin
 
 # Install modules
 1. go get github.com/go-martini/martini
