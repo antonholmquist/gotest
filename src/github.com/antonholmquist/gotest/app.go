@@ -7,6 +7,7 @@ import (
 	//"io"
 	"strings"
 	"regexp"
+  "encoding/base64"
 )
 
 import "github.com/go-martini/martini"
@@ -74,7 +75,9 @@ func main() {
 
     var responseString = fetch()
 
-    jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseString + "\");"
+    responseStringBase64 := base64.StdEncoding.EncodeToString([]byte(responseString))
+
+    jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
 
     return jsonp
 
