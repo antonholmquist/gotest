@@ -36,6 +36,8 @@ func fetch() string {
 		// Make relative urls absolute
 		modifiedResponseString = strings.Replace(modifiedResponseString, "\"/web/", "\"https://partner.ikanobank.se/web/", -1)
 
+		// Special one
+		modifiedResponseString = strings.Replace(modifiedResponseString, "BotDetectCaptcha.ashx?get=layoutStyleSheet", "https://partner.ikanobank.se/web/BotDetectCaptcha.ashx?get=layoutStyleSheet", 1)
 		
 		// Remove some standard strings
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<!DOCTYPE html>", "", 1)
@@ -45,6 +47,7 @@ func fetch() string {
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</html>", "", 1)
+		
 		
 
 
