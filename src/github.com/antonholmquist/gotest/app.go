@@ -5,9 +5,9 @@ import (
 	"net/http"
 	//"text/scanner"
 	//"io"
-	"strings"
+	"encoding/base64"
 	"regexp"
-  "encoding/base64"
+	"strings"
 )
 
 import "github.com/go-martini/martini"
@@ -23,7 +23,7 @@ func fetch() string {
 
 	if err != nil {
 		fmt.Println(err.Error())
-    return err.Error()
+		return err.Error()
 	} else {
 
 		responseString, _ := htmlRes.Body.ToString()
@@ -32,26 +32,35 @@ func fetch() string {
 
 		var matches [][]int = re.FindAllStringIndex(responseString, -1)
 
-        modifiedResponseString := responseString
+		modifiedResponseString := responseString
 
-        /*
-        Modify relative url so that links will still be correct
-        From: <link href="/web/(X(1)S(j0kdjk45m1cpmq45fdxok4n0))/web/site_files/templates/template.css"
-        To: <link href="https://partner.ikanobank.se/web/site_files/templates/template.css"
+		// Remove some standard strings
+		modifiedResponseString = strings.Replace(modifiedResponseString, "<!DOCTYPE html>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "<html>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "<head>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "</head>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "<body>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "</body>", "", 1)
+		modifiedResponseString = strings.Replace(modifiedResponseString, "</html>", "", 1)
 
-        */
+		/*
+		   Modify relative url so that links will still be correct
+		   From: <link href="/web/(X(1)S(j0kdjk45m1cpmq45fdxok4n0))/web/site_files/templates/template.css"
+		   To: <link href="https://partner.ikanobank.se/web/site_files/templates/template.css"
 
-        for i := 0; i < len(matches); i++ {
+		*/
 
-            match := matches[i];
-            from := match[0]
-            to := match[1]
+		for i := 0; i < len(matches); i++ {
 
-            oldString := responseString[from:to + 38]
-            newString := "<link href=\"https://partner.ikanobank.se/web/"
+			match := matches[i]
+			from := match[0]
+			to := match[1]
 
-            modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
-        }
+			oldString := responseString[from : to+38]
+			newString := "<link href=\"https://partner.ikanobank.se/web/"
+
+			modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
+		}
 
 		return modifiedResponseString
 
@@ -71,17 +80,17 @@ func main() {
 
 	})
 
-  app.Get("/jsonp.js", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
+	app.Get("/jsonp.js", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
-    var responseString = fetch()
+		var responseString = fetch()
 
-    responseStringBase64 := base64.StdEncoding.EncodeToString([]byte(responseString))
+		responseStringBase64 := base64.StdEncoding.EncodeToString([]byte(responseString))
 
-    jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
+		jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
 
-    return jsonp
+		return jsonp
 
-  })
+	})
 
 	app.Get("/proxy/**", func(params martini.Params) string {
 
