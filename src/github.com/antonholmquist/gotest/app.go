@@ -80,8 +80,6 @@ func main() {
 
 		scriptString = strings.Replace(scriptString, "<base_64_content>", responseStringBase64, 1)
 
-		//fmt.Println("bytes: " + scriptString)
-		//jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
 
 		return scriptString
 
