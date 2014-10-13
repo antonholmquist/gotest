@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	//"regexp"
 	"strings"
+	"io/ioutil"
 )
 
 import "github.com/go-martini/martini"
@@ -70,9 +71,19 @@ func main() {
 
 		responseStringBase64 := base64.StdEncoding.EncodeToString([]byte(responseString))
 
-		jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
+		bytes, err := ioutil.ReadFile("./src/github.com/antonholmquist/gotest/script.js")
+		scriptString := string(bytes)
 
-		return jsonp
+		if (err != nil) {
+			fmt.Println("error: " + err.Error())
+		}
+
+		scriptString = strings.Replace(scriptString, "<base_64_content>", responseStringBase64, 1)
+
+		//fmt.Println("bytes: " + scriptString)
+		//jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseStringBase64 + "\");"
+
+		return scriptString
 
 	})
 
