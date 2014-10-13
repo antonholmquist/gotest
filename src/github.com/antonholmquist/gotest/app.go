@@ -12,7 +12,7 @@ import (
 import "github.com/go-martini/martini"
 import "github.com/franela/goreq"
 
-func fetch(completion chan string) {
+func fetch() string {
 	htmlReq := goreq.Request{
 		Uri:          "https://partner.ikanobank.se/web/FAMILYuppdatera",
 		MaxRedirects: 10,
@@ -22,6 +22,7 @@ func fetch(completion chan string) {
 
 	if err != nil {
 		fmt.Println(err.Error())
+    return err.Error()
 	} else {
 
 		responseString, _ := htmlRes.Body.ToString()
@@ -51,25 +52,20 @@ func fetch(completion chan string) {
             modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
         }
 
-		completion <- modifiedResponseString
+		return modifiedResponseString
 
 	}
 }
 
 func main() {
 
-	go fetch(nil)
+	fetch()
 
 	app := martini.Classic()
 
 	app.Get("/", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
-		fmt.Println("Before routine")
-		responseChannel := make(chan string)
-
-		go fetch(responseChannel)
-
-		var responseString string = <-responseChannel
+		var responseString = fetch()
 
 		fmt.Println("After routine", responseString)
 
