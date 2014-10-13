@@ -64,8 +64,7 @@ func main() {
 
 	app.Get("/", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
-		var responseString = fetch()
-		return responseString
+		return "<!DOCTYPE html><html><body><div><script type=\"text/javascript\" src=\"http://ikano-ikea-family.herokuapp.com/jsonp.js\"></script></div></body></html>"
 
 	})
 
