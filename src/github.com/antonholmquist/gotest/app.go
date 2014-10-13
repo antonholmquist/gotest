@@ -6,8 +6,8 @@ import (
 	//"text/scanner"
 	//"io"
 	"encoding/base64"
-	"regexp"
-	"strings"
+	//"regexp"
+	//"strings"
 )
 
 import "github.com/go-martini/martini"
@@ -15,9 +15,11 @@ import "github.com/franela/goreq"
 
 func fetch() string {
 	htmlReq := goreq.Request{
-		Uri:          "https://partner.ikanobank.se/web/FAMILYuppdatera",
-		MaxRedirects: 10,
+		Uri:          "https://partner.ikanobank.se/web/engines/page.aspx?structid=3870&AspxAutoDetectCookieSupport=1",
+		MaxRedirects: 0,
 	}
+
+	htmlReq.AddHeader("Cookie", "AspxAutoDetectCookieSupport=1; path=/")
 
 	htmlRes, err := htmlReq.Do()
 
@@ -28,12 +30,17 @@ func fetch() string {
 
 		responseString, _ := htmlRes.Body.ToString()
 
+		/*
+		fmt.Println("responseString: ", responseString)
+
 		re := regexp.MustCompile("<link href=\"/web/")
 
-		var matches [][]int = re.FindAllStringIndex(responseString, -1)
+		//var matches [][]int = re.FindAllStringIndex(responseString, -1)
+		*/
 
 		modifiedResponseString := responseString
 
+		/*
 		// Remove some standard strings
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<!DOCTYPE html>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<html>", "", 1)
@@ -42,6 +49,7 @@ func fetch() string {
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</html>", "", 1)
+		*/
 
 		/*
 		   Modify relative url so that links will still be correct
@@ -50,6 +58,7 @@ func fetch() string {
 
 		*/
 
+		  /*
 		for i := 0; i < len(matches); i++ {
 
 			match := matches[i]
@@ -60,7 +69,7 @@ func fetch() string {
 			newString := "<link href=\"https://partner.ikanobank.se/web/"
 
 			modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
-		}
+		}*/
 
 		return modifiedResponseString
 
