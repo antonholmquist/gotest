@@ -66,12 +66,19 @@ func main() {
 	app.Get("/", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
 
 		var responseString = fetch()
-
-		fmt.Println("After routine", responseString)
-
 		return responseString
 
 	})
+
+  app.Get("/jsonp.js", func(res http.ResponseWriter, req *http.Request, params martini.Params) string {
+
+    var responseString = fetch()
+
+    jsonp := "var ikanoIkeaFamilyCallback = function(\"" + responseString + "\");"
+
+    return jsonp
+
+  })
 
 	app.Get("/proxy/**", func(params martini.Params) string {
 
