@@ -7,7 +7,7 @@ import (
 	//"io"
 	"encoding/base64"
 	//"regexp"
-	//"strings"
+	"strings"
 )
 
 import "github.com/go-martini/martini"
@@ -30,17 +30,12 @@ func fetch() string {
 
 		responseString, _ := htmlRes.Body.ToString()
 
-		/*
-		fmt.Println("responseString: ", responseString)
-
-		re := regexp.MustCompile("<link href=\"/web/")
-
-		//var matches [][]int = re.FindAllStringIndex(responseString, -1)
-		*/
-
 		modifiedResponseString := responseString
 
-		/*
+		// Make relative urls absolute
+		modifiedResponseString = strings.Replace(modifiedResponseString, "\"/web/site_files/", "\"https://partner.ikanobank.se/web/site_files/", -1)
+
+		
 		// Remove some standard strings
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<!DOCTYPE html>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<html>", "", 1)
@@ -49,27 +44,7 @@ func fetch() string {
 		modifiedResponseString = strings.Replace(modifiedResponseString, "<body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</body>", "", 1)
 		modifiedResponseString = strings.Replace(modifiedResponseString, "</html>", "", 1)
-		*/
 
-		/*
-		   Modify relative url so that links will still be correct
-		   From: <link href="/web/(X(1)S(j0kdjk45m1cpmq45fdxok4n0))/web/site_files/templates/template.css"
-		   To: <link href="https://partner.ikanobank.se/web/site_files/templates/template.css"
-
-		*/
-
-		  /*
-		for i := 0; i < len(matches); i++ {
-
-			match := matches[i]
-			from := match[0]
-			to := match[1]
-
-			oldString := responseString[from : to+38]
-			newString := "<link href=\"https://partner.ikanobank.se/web/"
-
-			modifiedResponseString = strings.Replace(modifiedResponseString, oldString, newString, -1)
-		}*/
 
 		return modifiedResponseString
 
