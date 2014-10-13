@@ -71,7 +71,9 @@ func main() {
 
 		responseStringBase64 := base64.StdEncoding.EncodeToString([]byte(responseString))
 
+
 		bytes, err := ioutil.ReadFile("./src/github.com/antonholmquist/gotest/script.js")
+
 		scriptString := string(bytes)
 
 		if (err != nil) {
@@ -79,7 +81,6 @@ func main() {
 		}
 
 		scriptString = strings.Replace(scriptString, "<base_64_content>", responseStringBase64, 1)
-
 
 		return scriptString
 
